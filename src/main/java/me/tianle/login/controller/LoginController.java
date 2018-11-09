@@ -15,7 +15,7 @@ public class LoginController {
     Set<User> set = new HashSet<>();
     Map<String, String> userMap = new HashMap<>();
 
-    @RequestMapping("/")
+    @RequestMapping("/index")
     public ModelAndView index() {
         return new ModelAndView("index");
     }

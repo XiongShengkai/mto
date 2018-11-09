@@ -2,33 +2,72 @@
 <html lang="zh" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>用户登录</title>
-    <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
-    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <title>数据迁移</title>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/bootstrap.min.js"></script>
+    <link rel='stylesheet' href="../static/bootstrap.min.css">
+    <!--<link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>-->
+
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+
 </head>
 <body class="form-bg">
 <div class="container my-form">
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
-            <form class="form-horizontal" th:action="@{/login}" th:object="${user}" method="post">
-                <span class="heading">用户登录</span>
+            <!--<form class="form-horizontal" th:action="@{/login}" th:object="${user}" method="post">-->
+            <div class="form-horizontal">
+                <span class="heading">源数据库</span>
                 <div class="form-group">
-                    <input type="text" name="name" class="form-control" id="inputEmail3" placeholder="用户名">
+                    <input type="text" name="sourceIp" class="form-control" id="sourceIp" placeholder="源IP" value="47.96.102.172:8066/FINANCE">
+                    <i class="fa fa-user"></i>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="sourceUser" class="form-control" id="sourceUser" placeholder="源用户名" value="admin1">
                     <i class="fa fa-user"></i>
                 </div>
                 <div class="form-group help">
-                    <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="密　码">
+                    <input type="password" name="sourcePassword" class="form-control" id="sourcePassword" placeholder="源密码" value="admin098789">
+                    <i class="fa fa-lock"></i>
+                </div>
+                <div class="form-group help">
+                    <input type="text" name="sourceTable" class="form-control" id="sourceTable" placeholder="源表名" value="fi_acc_emit_goods_ga">
+                    <i class="fa fa-lock"></i>
+                </div>
+
+
+                <span class="heading">目标数据库</span>
+                <div class="form-group">
+                    <input type="text" name="targetIp" class="form-control" id="targetIp" placeholder="目标IP">
+                    <i class="fa fa-user"></i>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="targetUser" class="form-control" id="targetUser" placeholder="目标用户名">
+                    <i class="fa fa-user"></i>
+                </div>
+                <div class="form-group help">
+                    <input type="password" name="targetPassword" class="form-control" id="targetPassword" placeholder="目标密码">
+                    <i class="fa fa-lock"></i>
+                </div>
+                <div class="form-group help">
+                    <input type="text" name="targetTable" class="form-control" id="targetTable" placeholder="目标表名">
                     <i class="fa fa-lock"></i>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-default">登录</button>
+                    <button id="btnAdd" type="submit" class="btn btn-default" title="警告！"
+                            data-container="body" data-toggle="popover" data-placement="left"
+                            data-content="以上内容每项必填！">数据移行</button>
+                    <button id="overlay" style="display:none " type="submit" class="btn btn-default">请稍后...</button>
                 </div>
-            </form>
+            </div>
+            <!--</form>-->
         </div>
     </div>
 </div>
 
-<div class="container my-form">
+<!--<div class="container my-form">
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
             <div class="form-horizontal">
@@ -47,7 +86,27 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
+
+<!--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">-->
+    <!--<div class="modal-dialog modal-dialog-centered" role="document">-->
+        <!--<div class="modal-content">-->
+            <!--<div class="modal-header">-->
+                <!--<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>-->
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+                    <!--<span aria-hidden="true">&times;</span>-->
+                <!--</button>-->
+            <!--</div>-->
+            <!--<div class="modal-body">-->
+                <!--以上内容每项必填！-->
+            <!--</div>-->
+            <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
 </body>
 <style>
     .my-form {
@@ -222,4 +281,167 @@
     });
 
 </script>
+
+<script type="text/javascript">
+    // $("#btnAdd").click(function () {
+    //     if($("#targetTable").isEmpty()){
+    //         alert("画面上全部空格均为必填项!");
+    //     }
+    // });
+
+
+    $("#btnAdd").click(function(){
+        if(check("sourceIp") || check("targetIp")
+            ||check("sourceUser")||check("targetUser")
+            ||check("sourcePassword")||check("targetPassword")
+            ||check("sourceTable")||check("targetTable"))
+        {
+            // $("[data-toggle='popover']").popover();
+            // $("exampleModalCenter").modal('show');
+            alert("画面上全部空格均为必填项!");
+        }
+        else
+        {
+            var obj ={
+                "sourceIp":$("#sourceIp").val(),
+                "targetIp":$("#targetIp").val(),
+                "sourceUser":$("#sourceUser").val(),
+                "targetUser":$("#targetUser").val(),
+                "sourcePassword":$("#sourcePassword").val(),
+                "targetPassword":$("#targetPassword").val(),
+                "sourceTable":$("#sourceTable").val(),
+                "targetTable":$("#targetTable").val(),
+                "booleanTarget":false
+            };
+            showOverlay();
+            $("#btnAdd").hide();
+            // $("#msg").hide();
+            $.requestJson('check', obj, function(data,message,code){
+                $("#overlay").hide();
+                $("#btnAdd").show();
+                // $("#msg").show();
+                // $("#msg").val(message);
+                alert(message);
+            },function (data,message,code) {
+                $("#overlay").hide();
+                $("#btnAdd").show();
+                // $("#msg").show();
+                // $("#msg").val(message);
+                alert(message);
+            });
+        }
+    });
+
+    function check(idSelector)
+    {
+        if($("#"+idSelector).val() == null ||
+            $("#"+idSelector).val() == "" ||
+            $("#"+idSelector).val() == undefined)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+    $.requestJson = function(uri,param, okCallback, failCallback, lockScreen){
+        // if(lockScreen == undefined || lockScreen){
+        //     lockBody();
+        // }
+        param = param ? param :{};
+        $.ajax({
+            url:uri,
+            dataType:"json",
+            type:"POST",
+            async:true,
+            data:JSON.stringify(param),
+            contentType:"application/json; charset=utf-8",
+            success:function(data, textStatus, jqXHR){
+                commonReqSuccessHandler(data, okCallback, failCallback, lockScreen);
+            },
+            error:function(jqXHR, textStatus, errorThrown){
+                if(lockScreen == undefined || lockScreen){
+                    // unlockBody();
+                }
+                // log(jqXHR.status + '-' + textStatus + '-' + errorThrown);
+                // $.showMessage('E000000200', null, function(){
+//			$.showMessage('E000000200' + '-' + jqXHR.status + '-' + textStatus + '-' + errorThrown, null, function(){
+//                 });
+            }
+        });
+    };
+
+
+    function commonReqSuccessHandler(data, okCallback, failCallback, lockScreen){
+        // if(lockScreen == undefined || lockScreen){
+        //     unlockBody();
+        // }
+        if(data == null){
+            log('return data is null');
+            return;
+        }
+        if(data.ok){
+            if($.isFunction(okCallback)){
+                okCallback(data.data, data.message , data.code);
+            }
+        }else{
+            if(data.message){
+                if($.isFunction(failCallback)){
+                    failCallback(data.data, data.message, data.code);
+                }
+            }else{
+                if($.isFunction(failCallback)){
+                    failCallback(data.data, data.data, data.message, data.code);
+                }
+            }
+        }
+    }
+
+    /* 显示遮罩层 */
+    function showOverlay() {
+        // $("#overlay").height(pageHeight());
+        // $("#overlay").width(pageWidth());
+
+        // fadeTo第一个参数为速度，第二个为透明度
+        // 多重方式控制透明度，保证兼容性，但也带来修改麻烦的问题
+        // $("#overlay").fadeTo(200, 0.5);
+        $("#overlay").show();
+    }
+
+    /* 隐藏覆盖层 */
+    function hideOverlay() {
+        $("#overlay").fadeOut(200);
+    }
+
+    /* 当前页面高度 */
+    function pageHeight() {
+        return document.body.scrollHeight;
+    }
+
+    /* 当前页面宽度 */
+    function pageWidth() {
+        return document.body.scrollWidth;
+    }
+
+</script>
+
+<style type="text/css">
+    #overlay {
+        /*background: rgba(60, 60, 60, 0.69);*/
+        /*filter: alpha(opacity=50); !* IE的透明度 *!*/
+        /*opacity: 0.5;  !* 透明度 *!*/
+        /*display: none;*/
+        /*position: absolute;*/
+        /*top: 0px;*/
+        /*left: 0px;*/
+        /*width: 100%;*/
+        /*height: 100%;*/
+        /*z-index: 100; !* 此处的图层要大于页面 *!*/
+        display:none;
+        color: red;
+    }
+</style>
 </html>
